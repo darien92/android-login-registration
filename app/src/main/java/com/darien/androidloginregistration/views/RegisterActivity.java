@@ -1,23 +1,27 @@
 package com.darien.androidloginregistration.views;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.VolleyError;
 import com.darien.androidloginregistration.R;
 import com.darien.androidloginregistration.UseCases.Validator;
+import com.darien.androidloginregistration.viewmodels.RegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText inputName, inputLastName, inputCardNumber, inputRegistrationNumber, inputPhone, inputEmail,
+    private EditText inputName, inputLastName, inputCardNumber, inputRegistrationNumber, inputPhone, inputEmail,
             inputPassword, inputConfirmPassword;
-    Button btnRegister;
-    ProgressBar pbLoading;
+    private Button btnRegister;
+    private ProgressBar pbLoading;
+
+    private RegisterViewModel registerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,31 @@ public class RegisterActivity extends AppCompatActivity {
         inputEmail = findViewById(R.id.input_email_register);
         inputPassword = findViewById(R.id.input_password_register);
         inputConfirmPassword = findViewById(R.id.input_confirm_password_register);
+        pbLoading = findViewById(R.id.register_progress_bar);
         btnRegister = findViewById(R.id.btn_register);
+        registerViewModel = new RegisterViewModel(getApplicationContext());
+
+        registerViewModel.setOnRegisterRequestListener(new RegisterViewModel.OnRegisterRequestListener() {
+            @Override
+            public void onRegisterError(String message) {
+                showModal(message);
+                hideLoading();
+            }
+
+            @Override
+            public void onSuccess() {
+                Intent goToMainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(goToMainIntent);
+                hideLoading();
+                finish();
+            }
+
+            @Override
+            public void onNetworkError(VolleyError error) {
+                showModal(getResources().getString(R.string.something_went_wrong));
+                hideLoading();
+            }
+        });
 
         btnRegister.setOnClickListener(view -> {
             if (!Validator.isName(inputName.getText().toString() + inputLastName.getText().toString())){
@@ -55,6 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
             }else {
                 showLoading();
                 //do request
+                registerViewModel.requestRegister(inputName.getText().toString(), inputLastName.getText().toString(),
+                        inputCardNumber.getText().toString(), inputRegistrationNumber.getText().toString(),
+                        inputPhone.getText().toString(), inputEmail.getText().toString(), inputPassword.getText().toString());
             }
         });
     }
@@ -78,12 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
         builder.setMessage(message)
                 .setTitle(getResources().getString(R.string.alert))
                 .setCancelable(true)
-                .setPositiveButton(getResources().getString(R.string.accept),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
+                .setPositiveButton(getResources().getString(R.string.accept), (dialog,  id) -> {
+                    dialog.dismiss();
+                });
         try {
             alert = builder.create();
             alert.show();
