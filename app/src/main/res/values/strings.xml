@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">AndroidLoginRegistration</string>
+    <string name="email_pholder">email</string>
+    <string name="password_pholder">password</string>
+    <string name="login">Login</string>
+    <string name="create_account">Are you new? Click here to create account</string>
+    <string name="register">Register</string>
+    <string name="name_pholder">Name</string>
+    <string name="last_name_pholder">Last Name</string>
+    <string name="card_number_pholder">Card Number</string>
+    <string name="registration_number_pholder">Registration Number</string>
+    <string name="confirm_password_pholder">Confirm Password</string>
+    <string name="phone_pholder">Phone</string>
+    <string name="error_name">Name and last name can only be 30 characters long and only can contain letters</string>
+    <string name="error_card_number">Card number can only contain numbers and has to be 16 characters long</string>
+    <string name="error_registration_number">Registration number can only contain numbers and has to be 6 characters long</string>
+    <string name="error_phone_number">Phone number can only contain numbers and has to be 10 characters long</string>
+    <string name="error_password">Password has to contain at least 1 capital letter and 1 number</string>
+    <string name="error_email">Wrong email address</string>
+</resources>
