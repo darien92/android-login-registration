@@ -17,4 +17,7 @@
     <string name="error_phone_number">Phone number can only contain numbers and has to be 10 characters long</string>
     <string name="error_password">Password has to contain at least 1 capital letter and 1 number</string>
     <string name="error_email">Wrong email address</string>
+    <string name="alert">Alert</string>
+    <string name="accept">Accept</string>
+    <string name="passwords_dont_match">Please, verify that password and confirmation match</string>
 </resources>
